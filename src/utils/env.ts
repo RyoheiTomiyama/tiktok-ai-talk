@@ -1,3 +1,5 @@
+import './envLoad'
+
 // .envの型を定義
 const EnvType = {
     NODE_ENV: 'string',
