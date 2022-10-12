@@ -15,7 +15,7 @@ for (const envFile of dotenvFiles) {
     const dotEnvPath = path.resolve(process.cwd(), envFile)
 
     try {
-        dotenv.config({ path: dotEnvPath, override: true })
+        dotenv.config({ path: dotEnvPath })
     } catch (err) {
         console.error(err)
     }
