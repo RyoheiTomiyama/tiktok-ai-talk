@@ -1,4 +1,4 @@
-import './envLoad'
+// import './envLoad'
 
 // .envの型を定義
 const EnvType = {
@@ -13,7 +13,7 @@ type Result<T extends EnvKey> = typeof EnvType[T] extends 'string' ? string
 
 export const Env = {
     get<T extends EnvKey>(name: T): Result<T> {
-        const value = process.env[name]
+        const value = process.env[`REACT_APP_${name}`]
         if (!value) {
             throw Error(`Environment: ${name} is not found.`)
         }
