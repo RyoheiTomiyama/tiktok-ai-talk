@@ -4,6 +4,8 @@
 const EnvType = {
     NODE_ENV: 'string',
     VOICEVOX_API_URL: 'string',
+    A3RT_API_URL: 'string',
+    A3RT_API_KEY: 'string',
     NUM: 'number',
 } as const
 
