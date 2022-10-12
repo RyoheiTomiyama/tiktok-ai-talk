@@ -6,6 +6,8 @@ const EnvType = {
     VOICEVOX_API_URL: 'string',
     A3RT_API_URL: 'string',
     A3RT_API_KEY: 'string',
+    KATARAI_API_URL: 'string',
+    KATARAI_API_KEY: 'string',
     NUM: 'number',
 } as const
 
