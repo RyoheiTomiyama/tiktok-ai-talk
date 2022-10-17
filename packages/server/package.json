@@ -1,0 +1,14 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "tiktok-live-connector": "^1.0.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.11",
+    "esbuild-register": "^3.3.3"
+  }
+}

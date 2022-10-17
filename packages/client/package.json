@@ -1,5 +1,5 @@
 {
-  "name": "my-app",
+  "name": "client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -56,7 +56,6 @@
     "source-map-loader": "^3.0.0",
     "style-loader": "^3.3.1",
     "terser-webpack-plugin": "^5.2.5",
-    "tiktok-live-connector": "^1.0.1",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4",
     "webpack": "^5.64.4",
@@ -145,12 +144,6 @@
     ]
   },
   "devDependencies": {
-    "assert": "^2.0.0",
-    "browserify-zlib": "^0.2.0",
-    "buffer": "^6.0.3",
-    "express": "^4.18.2",
-    "stream": "^0.0.2",
-    "tsconfig-paths-webpack-plugin": "^4.0.0",
-    "util": "^0.12.5"
+    "tsconfig-paths-webpack-plugin": "^4.0.0"
   }
 }
