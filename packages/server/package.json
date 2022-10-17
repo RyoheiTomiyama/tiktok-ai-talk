@@ -9,6 +9,10 @@
   },
   "devDependencies": {
     "esbuild": "^0.15.11",
-    "esbuild-register": "^3.3.3"
+    "esbuild-register": "^3.3.3",
+    "xo": "^0.52.4"
+  },
+  "scripts": {
+    "test": "xo"
   }
 }
