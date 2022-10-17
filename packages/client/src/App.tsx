@@ -6,6 +6,7 @@ import { voicevoxClient } from './utils/axios';
 import { Env } from './utils/env';
 import Voicevox from '@/models/voicevox';
 import A3rt from './models/a3rt';
+import TiktokLive from './models/tiktokLive';
 
 function App() {
   const voicevox = new Voicevox()
@@ -18,6 +19,8 @@ function App() {
 
     console.log('post end')
     // console.log(synthesisResult.config, synthesisResult.headers)
+
+    const tiktokLive = new TiktokLive('joemsaaaaa')
   })
   return (
     <div className="App">
