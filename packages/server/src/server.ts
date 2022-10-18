@@ -1,7 +1,6 @@
 import { createServer } from 'node:http'
 import express from 'express'
 import { Server } from 'socket.io'
-import TiktokLive from 'src/models/tiktokLive'
 import { SocketRoom } from './models/socketRoom'
 
 const app = express()
@@ -52,14 +51,15 @@ io.on('connection', (socket) => {
       return
     }
 
+    console.log(rooms.size, rooms.has(username))
     if (rooms.has(username)) {
       await socket.join(username)
       console.log(`join room ${username}`)
     } else {
       const room = new SocketRoom(username)
+      rooms.set(username, room)
       await room.init()
       console.log(`create room ${username}`)
-      rooms.set(username, room)
     }
   })
 
