@@ -1,32 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query'
-import { io } from 'socket.io-client'
-import logo from './logo.svg';
-import './App.css';
+// import React, { useEffect, useState } from 'react';
+// import { useQuery } from '@tanstack/react-query'
+import logo from '@/logo.svg';
+import '@/App.css';
 // import { voicevoxClient } from './utils/axios';
-import { Env } from './utils/env';
+// import { Env } from './utils/env';
+import TiktokLive from '@/components/TiktokLive';
 // import Voicevox from '@/models/voicevox';
 // import A3rt from './models/a3rt';
-
-
-const socket =io(Env.get('SOCKET_SERVER'), {
-  // withCredentials: true,
-  query: {
-    // username: 'joemsaaaaa',
-    username: 'ebichan813',
-  },
-})
-
-socket.on('connect_error', (err) => {
-  console.error(err)
-  socket.disconnect()
-})
-socket.on('disconnect', () => {
-  socket.disconnect()
-})
-socket.on('chat', (data) => {
-  console.log(data)
-})
 
 function App() {
   // const voicevox = new Voicevox()
@@ -44,6 +24,7 @@ function App() {
   // })
   return (
     <div className="App">
+      <TiktokLive />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

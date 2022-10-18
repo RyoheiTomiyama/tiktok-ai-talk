@@ -3,22 +3,31 @@ import { WebcastPushConnection } from 'tiktok-live-connector'
 type TiktokLiveInterface = {
   connect(): Promise<void>
   disconnect(): void
-  setOnChat(callback: () => void): Promise<void>
-  setOnLike(callback: () => void): Promise<void>
-  setOnGift(callback: () => void): Promise<void>
+  setOnChat(callback: Callback): Promise<void>
+  setOnLike(callback: Callback): Promise<void>
+  setOnGift(callback: Callback): Promise<void>
 }
+
+type Callback = (data: any) => void
 
 export default class TiktokLive implements TiktokLiveInterface {
   liveConnection: WebcastPushConnection
-  onChat?: Function
-  onLike?: Function
-  onGift?: Function
+  onChat?: Callback
+  onLike?: Callback
+  onGift?: Callback
 
   constructor(
     public liveUserName: string,
-    options?: { onChat?: Function; onLike?: Function; onGift?: Function },
+    options?: { onChat?: Callback; onLike?: Callback; onGift?: Callback },
   ) {
-    this.liveConnection = new WebcastPushConnection(liveUserName)
+    this.liveConnection = new WebcastPushConnection(liveUserName, {
+      requestOptions: {
+        timeout: 10_000,
+      },
+      websocketOptions: {
+        timeout: 10_000,
+      },
+    })
     options?.onChat && this.setOnChat(options.onChat)
     options?.onLike && this.setOnLike(options.onLike)
     options?.onGift && this.setOnGift(options.onGift)
@@ -28,8 +37,10 @@ export default class TiktokLive implements TiktokLiveInterface {
     try {
       const result: unknown = await this.liveConnection.connect()
       console.debug('connetct')
-    } catch (error: any) {
-      console.error('error', error.message)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error('error', error.message)
+      }
     }
 
     this.liveConnection.on('chat', (data) => {
@@ -41,20 +52,25 @@ export default class TiktokLive implements TiktokLiveInterface {
       this.onLike?.(data)
     })
     this.liveConnection.on('gift', (data) => {
-      console.debug('on gift', data)
+      console.debug(
+        'on gift',
+        data.diamondCount,
+        data.giftName,
+        data.giftPictureUrl,
+      )
       this.onGift?.(data)
     })
   }
 
-  async setOnChat(callback: Function): Promise<void> {
+  async setOnChat(callback: Callback): Promise<void> {
     this.onChat = callback
   }
 
-  async setOnLike(callback: Function): Promise<void> {
+  async setOnLike(callback: Callback): Promise<void> {
     this.onLike = callback
   }
 
-  async setOnGift(callback: Function): Promise<void> {
+  async setOnGift(callback: Callback): Promise<void> {
     this.onGift = callback
   }
 

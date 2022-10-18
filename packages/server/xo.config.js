@@ -5,6 +5,7 @@ module.exports = {
       './*config*',
   ],
   rules: {
+    'import/extensions': 'off',
     'unicorn/filename-case': [
       'error',
       {
