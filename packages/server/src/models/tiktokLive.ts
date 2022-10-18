@@ -48,7 +48,7 @@ export default class TiktokLive implements TiktokLiveInterface {
       this.onChat?.(data)
     })
     this.liveConnection.on('like', (data) => {
-      console.debug('on like', data.nickname)
+      console.debug('on like', data.nickname, data.likeCount)
       this.onLike?.(data)
     })
     this.liveConnection.on('gift', (data) => {

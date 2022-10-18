@@ -3,6 +3,24 @@ import type { DefaultEventsMap } from 'socket.io/dist/typed-events'
 import TiktokLive from './tiktokLive'
 import { io } from '@/server'
 
+type BaseData = {
+  uniqueId: string
+  nickname: string
+  profilePictureUrl: string
+}
+
+type LikeData = BaseData & {
+  count: number
+}
+
+type GiftData = BaseData & {
+  diamondCount: number
+  giftName: string
+  giftPictureUrl: string
+  repeatCount: number
+  repeatEnd: boolean
+}
+
 export class SocketRoom {
   private readonly broadcast: BroadcastOperator<DefaultEventsMap, any>
   private tiktokLive?: TiktokLive
@@ -15,14 +33,13 @@ export class SocketRoom {
     try {
       this.tiktokLive = new TiktokLive(this.name, {
         onChat: (data: any) => {
-          console.log('chat')
           this.broadcast.emit('chat', data)
         },
         onLike: (data: any) => {
-          this.broadcast.emit('like', data)
+          this.broadcast.emit('like', this.convertLikeData(data))
         },
         onGift: (data: any) => {
-          this.broadcast.emit('gift', data)
+          this.broadcast.emit('gift', this.convertGiftData(data))
         },
       })
       await this.tiktokLive.connect()
@@ -45,5 +62,55 @@ export class SocketRoom {
     }
 
     return false
+  }
+
+  private convertLikeData(data: Record<string, any>): LikeData {
+    const { uniqueId, nickname, profilePictureUrl, count } = data
+    if (
+      typeof uniqueId !== 'string' ||
+      typeof nickname !== 'string' ||
+      typeof profilePictureUrl !== 'string' ||
+      typeof count !== 'number'
+    ) {
+      throw new TypeError('args is invalid like data.')
+    }
+
+    return { uniqueId, nickname, profilePictureUrl, count }
+  }
+
+  private convertGiftData(data: Record<string, any>): GiftData {
+    const {
+      uniqueId,
+      nickname,
+      profilePictureUrl,
+      diamondCount,
+      giftName,
+      giftPictureUrl,
+      repeatCount,
+      repeatEnd = true,
+    } = data
+    if (
+      typeof uniqueId !== 'string' ||
+      typeof nickname !== 'string' ||
+      typeof profilePictureUrl !== 'string' ||
+      typeof diamondCount !== 'number' ||
+      typeof giftName !== 'string' ||
+      typeof giftPictureUrl !== 'string' ||
+      typeof repeatCount !== 'number' ||
+      typeof repeatEnd !== 'boolean'
+    ) {
+      throw new TypeError('args is invalid like data.')
+    }
+
+    return {
+      uniqueId,
+      nickname,
+      profilePictureUrl,
+      diamondCount,
+      giftName,
+      giftPictureUrl,
+      repeatCount,
+      repeatEnd,
+    }
   }
 }

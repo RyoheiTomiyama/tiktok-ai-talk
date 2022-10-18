@@ -6,6 +6,9 @@
   "author": "富山涼平 <tennisnowboarderyou@gmail.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "node": "^16.10.x"
+  },
   "scripts": {
     "client": "yarn workspace client",
     "server": "yarn workspace server"
