@@ -10,13 +10,13 @@ type TiktokLiveInterface = {
 
 export default class TiktokLive implements TiktokLiveInterface {
   liveConnection: WebcastPushConnection
-  onChat?: () => void
-  onLike?: () => void
-  onGift?: () => void
+  onChat?: Function
+  onLike?: Function
+  onGift?: Function
 
   constructor(
     public liveUserName: string,
-    options?: { onChat?: () => void; onLike?: () => void; onGift?: () => void },
+    options?: { onChat?: Function; onLike?: Function; onGift?: Function },
   ) {
     this.liveConnection = new WebcastPushConnection(liveUserName)
     options?.onChat && this.setOnChat(options.onChat)
@@ -27,34 +27,34 @@ export default class TiktokLive implements TiktokLiveInterface {
   async connect(): Promise<void> {
     try {
       const result: unknown = await this.liveConnection.connect()
-      console.debug('connetct', result)
-    } catch (error: unknown) {
-      console.error(error)
+      console.debug('connetct')
+    } catch (error: any) {
+      console.error('error', error.message)
     }
 
     this.liveConnection.on('chat', (data) => {
-      console.debug('on chat', data)
-      this.onChat?.()
+      console.debug('on chat', data.comment)
+      this.onChat?.(data)
     })
     this.liveConnection.on('like', (data) => {
-      console.debug('on like', data)
-      this.onLike?.()
+      console.debug('on like', data.nickname)
+      this.onLike?.(data)
     })
     this.liveConnection.on('gift', (data) => {
       console.debug('on gift', data)
-      this.onGift?.()
+      this.onGift?.(data)
     })
   }
 
-  async setOnChat(callback: () => void): Promise<void> {
+  async setOnChat(callback: Function): Promise<void> {
     this.onChat = callback
   }
 
-  async setOnLike(callback: () => void): Promise<void> {
+  async setOnLike(callback: Function): Promise<void> {
     this.onLike = callback
   }
 
-  async setOnGift(callback: () => void): Promise<void> {
+  async setOnGift(callback: Function): Promise<void> {
     this.onGift = callback
   }
 
