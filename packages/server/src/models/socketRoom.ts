@@ -9,9 +9,7 @@ type BaseData = {
   profilePictureUrl: string
 }
 
-type LikeData = BaseData & {
-  count: number
-}
+type LikeData = BaseData & {}
 
 type GiftData = BaseData & {
   diamondCount: number
@@ -65,17 +63,16 @@ export class SocketRoom {
   }
 
   private convertLikeData(data: Record<string, any>): LikeData {
-    const { uniqueId, nickname, profilePictureUrl, count } = data
+    const { uniqueId, nickname, profilePictureUrl } = data
     if (
       typeof uniqueId !== 'string' ||
       typeof nickname !== 'string' ||
-      typeof profilePictureUrl !== 'string' ||
-      typeof count !== 'number'
+      typeof profilePictureUrl !== 'string'
     ) {
-      throw new TypeError('args is invalid like data.')
+      throw new TypeError(`args is invalid like data. ${data}`)
     }
 
-    return { uniqueId, nickname, profilePictureUrl, count }
+    return { uniqueId, nickname, profilePictureUrl }
   }
 
   private convertGiftData(data: Record<string, any>): GiftData {
@@ -99,7 +96,7 @@ export class SocketRoom {
       typeof repeatCount !== 'number' ||
       typeof repeatEnd !== 'boolean'
     ) {
-      throw new TypeError('args is invalid like data.')
+      throw new TypeError(`args is invalid gift data. ${data}`)
     }
 
     return {
