@@ -31,23 +31,12 @@ app.get('/', (request, result) => {
 
 const rooms = new Map<string, SocketRoom>()
 
-io.use((socket, next) => {
-  const username = socket.handshake.query.username!
-
-  if (!username) {
-    console.error('username not found')
-    next(new Error('username not found'))
-  }
-
-  next()
-})
-
 io.on('connection', (socket) => {
   console.log('socket io connected')
 
   socket.on('enter', async ({ username }) => {
     if (!username || typeof username !== 'string') {
-      console.error('username not found')
+      console.error('username not found', username)
       return
     }
 
