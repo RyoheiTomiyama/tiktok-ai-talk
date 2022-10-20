@@ -22,10 +22,10 @@ export default class TiktokLive implements TiktokLiveInterface {
   ) {
     this.liveConnection = new WebcastPushConnection(liveUserName, {
       requestOptions: {
-        timeout: 10_000,
+        timeout: 10000,
       },
       websocketOptions: {
-        timeout: 10_000,
+        timeout: 10000,
       },
     })
     options?.onChat && this.setOnChat(options.onChat)
@@ -41,7 +41,11 @@ export default class TiktokLive implements TiktokLiveInterface {
       if (error instanceof Error) {
         console.error('error', error.message)
       }
+      return
     }
+
+    console.log(await this.liveConnection.getRoomInfo())
+    // console.log(await this.liveConnection.getAvailableGifts())
 
     this.liveConnection.on('chat', (data) => {
       console.debug('on chat', data.comment)
@@ -59,6 +63,26 @@ export default class TiktokLive implements TiktokLiveInterface {
         data.giftPictureUrl,
       )
       this.onGift?.(data)
+    })
+
+    this.liveConnection.on('error', (data) => {
+      console.log('tiktok error', data)
+      if (data?.exception instanceof Error) {
+        console.error(data.exception.stack)
+      }
+    })
+
+    this.liveConnection.on('streamEnd', (data) => {
+      console.log('tiktok stream end', data)
+    })
+
+    // const ping = setInterval(async () => {
+    //   // await this.liveConnection.
+    //   console.log(await this.liveConnection.getRoomInfo())
+    // }, 60000)
+    this.liveConnection.on('disconnected', () => {
+      console.log('tiktok disconnected')
+      // clearInterval(ping)
     })
   }
 
