@@ -41,15 +41,14 @@ io.on('connection', (socket) => {
     }
 
     console.log(rooms.size, rooms.has(username))
-    if (rooms.has(username)) {
-      await socket.join(username)
-      console.log(`join room ${username}`)
-    } else {
+    if (!rooms.has(username)) {
       const room = new SocketRoom(username)
       rooms.set(username, room)
       await room.init()
       console.log(`create room ${username}`)
     }
+    await socket.join(username)
+    console.log(`join room ${username}`)
   })
 
   socket.on('disconnecting', async () => {
