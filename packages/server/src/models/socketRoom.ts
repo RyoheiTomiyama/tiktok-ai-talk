@@ -9,7 +9,9 @@ type BaseData = {
   profilePictureUrl: string
 }
 
-type LikeData = BaseData & {}
+type LikeData = BaseData & {
+  likeCount: number
+}
 
 type GiftData = BaseData & {
   diamondCount: number
@@ -30,7 +32,9 @@ export class SocketRoom {
   async init() {
     try {
       this.tiktokLive = new TiktokLive(this.name, {
-        onChat: (data: any) => {
+        onChat: async (data: any) => {
+          console.log((await this.broadcast.fetchSockets()).length)
+          console.log('emit chat')
           this.broadcast.emit('chat', data)
         },
         onLike: (data: any) => {
@@ -63,16 +67,17 @@ export class SocketRoom {
   }
 
   private convertLikeData(data: Record<string, any>): LikeData {
-    const { uniqueId, nickname, profilePictureUrl } = data
+    const { uniqueId, nickname, profilePictureUrl, likeCount } = data
     if (
       typeof uniqueId !== 'string' ||
       typeof nickname !== 'string' ||
-      typeof profilePictureUrl !== 'string'
+      typeof profilePictureUrl !== 'string' ||
+      typeof likeCount !== 'number'
     ) {
       throw new TypeError(`args is invalid like data. ${data}`)
     }
 
-    return { uniqueId, nickname, profilePictureUrl }
+    return { uniqueId, nickname, profilePictureUrl, likeCount }
   }
 
   private convertGiftData(data: Record<string, any>): GiftData {
